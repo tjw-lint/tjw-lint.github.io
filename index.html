@@ -4,8 +4,8 @@
     <title>ESLint setup</title>
     <script src="/vendors/vue.min.js"></script>
     <script src="/vendors/highlight.min.js"></script>
-    <link href="/vendors/water.min.css">
-    <link href="/vendors/monokai.min.css">
+    <link rel="stylesheet" href="/vendors/water.min.css">
+    <link rel="stylesheet" href="/vendors/monokai.min.css">
     <style>
       .controls > span {
         display: inline-block;
@@ -18,6 +18,36 @@
   </head>
   <body>
     <div id="app">
+      <h1>ESLint config automator</h1>
+      <p>ESLint 9+ rules for ESM projects</p>
+
+      <h2>Prequisites</h2>
+      <ol>
+        <li>
+          Use <a href="https://volta.sh">Volta</a> to install Node/npm
+        </li>
+        <li>
+          If you don't have a <code>package.json</code> do <code>npm init -y</code> first
+        </li>
+        <li>
+          Run <code>npm pkg set type=module</code>
+        </li>
+        <li>
+          Create an <code>eslint.config.js</code> next to the <code>package.json</code>
+        </li>
+        <li>
+          Run <code>npm pkg set scripts.lint="eslint *.js src"</code>
+          <ul>
+            <li>
+              Change <code>*.js src</code> to your files and folders you want to be linted
+            </li>
+          </ul>
+        </li>
+        <li>
+          Check the boxes below for what Linting rules/plugins you want:
+        </li>
+      </ol>
+
       <div class="controls">
         <span>
           <check-box v-model="js">JS</check-box>
@@ -44,7 +74,7 @@
       </div>
       <h2>Run</h2>
       <code v-text="npmInstall"></code>
-      <h2>eslint.config.js</h2>
+      <h2>Put this in your <code>eslint.config.js</code>:</h2>
       <pre><code v-html="eslintConfig"></code></pre>
     </div>
 
