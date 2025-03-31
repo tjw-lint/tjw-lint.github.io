@@ -13,6 +13,9 @@
       li {
         line-height: 1.5;
       }
+      input[type="checkbox"]:active {
+        transform: translateY(0px);
+      }
       .controls > span {
         display: inline-block;
         margin-right: 30px;
@@ -23,6 +26,14 @@
       }
       .controls label:not(:first-of-type) {
         margin-left: 10px;
+      }
+      .alert {
+        background: #161F27;
+        border-width: 0px 0px 0px 5px;
+        border-color: #FFBE85;
+        margin: 20px 0px;
+        padding: 25px;
+        font-size: 150%;
       }
     </style>
   </head>
@@ -81,6 +92,14 @@
           <check-box v-model="tjwJest">TJW Jest</check-box>
           <check-box v-model="tjwVitest">TJW Vitest</check-box>
         </span>
+      </div>
+      <div v-if="tjwImport" class="alert">
+        <p>
+          <strong>IMPORTANT:</strong>
+          You will also need to create an empty <code>.eslintrc.cjs</code> file next to your <code>package.json</code>,
+          due to a <a href="https://github.com/import-js/eslint-plugin-import/issues/3079">known bug</a> with the import
+          linting plugin.
+        </p>
       </div>
       <h2>Run</h2>
       <code v-text="npmInstall"></code>
