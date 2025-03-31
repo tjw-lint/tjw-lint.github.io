@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ESLint setup</title>
+    <script src="https://unpkg.com/vue@3.2.36/dist/vue.global.prod.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.10.0/highlight.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/gh/kognise/water.css@latest/dist/dark.min.css">
+    <link href="https://unpkg.com/highlightjs@9.16.2/styles/monokai-sublime.css">
+    <style>
+      .controls > span {
+        display: inline-block;
+        margin-right: 30px;
+      }
+      .controls label:not(:first-of-type) {
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div class="controls">
+        <span>
+          <check-box v-model="js">JS</check-box>
+          <check-box v-model="tjwJs">TJW JS</check-box>
+        </span>
+        <span>
+          <check-box v-model="Import">ESM Import</check-box>
+          <check-box v-model="tjwImport">TJW Import</check-box>
+          <check-box v-model="importAlias">Import Alias</check-box>
+        </span>
+        <span>
+          <check-box v-model="vue2">Vue 2</check-box>
+          <check-box v-model="vue3">Vue 3</check-box>
+          <check-box v-model="tjwVue">TJW Vue</check-box>
+          <check-box v-model="vueA11y">Vue A11Y</check-box>
+        </span>
+        <span>
+          <check-box v-model="tjwJsdoc">TJW JSDoc</check-box>
+        </span>
+        <span>
+          <check-box v-model="tjwJest">TJW Jest</check-box>
+          <check-box v-model="tjwVitest">TJW Vitest</check-box>
+        </span>
+      </div>
+      <h2>Run</h2>
+      <code v-text="npmInstall"></code>
+      <h2>eslint.config.js</h2>
+      <pre><code v-html="eslintConfig"></code></pre>
+    </div>
+
+    <script>
+      const app = Vue.createApp({
+        components: {
+          CheckBox: {
+            template: [
+              '<label>',
+              '<input ',
+              ':checked="modelValue" ',
+              'type="checkbox" ',
+              '@input="$emit(\'update:modelValue\', $event.target.checked)">',
+              '<slot></slot>',
+              '</label>'
+            ].join(''),
+            props: ['modelValue']
+          }
+        },
+        data: function () {
+          return {
+            Import: false,
+            importAlias: false,
+            js: true,
+            tjwImport: false,
+            tjwJs: false,
+            tjwJest: false,
+            tjwVitest: false,
+            tjwJsdoc: false,
+            tjwVue: false,
+            vueA11y: false,
+            vue2: false,
+            vue3: false
+          };
+        },
+        computed: {
+          npmInstall: function () {
+            let output = [];
+            output.push('npm install --save-dev eslint@9 @eslint/js');
+            if (this.tjwJs) {
+              output.push('@stylistic/eslint-plugin-js');
+              output.push('globals');
+            }
+            if (this.tjwJsdoc) {
+              output.push('eslint-plugin-jsdoc');
+            }
+            if (
+              this.Import ||
+              this.tjwImport ||
+              this.importAlias
+            ) {
+              output.push('eslint-plugin-import');
+            }
+            if (this.importAlias) {
+              output.push('eslint-import-resolver-vite');
+            }
+            if (this.vue2 || this.vue3) {
+              output.push('eslint-plugin-vue');
+            }
+            if (this.vueA11y) {
+              output.push('eslint-plugin-vuejs-accessibility');
+            }
+            if (this.tjwJest || this.tjwVitest) {
+              output.push('eslint-plugin-jest');
+            }
+            if (
+              this.tjwJs ||
+              this.tjwJest ||
+              this.tjwVitest ||
+              this.tjwJsdoc ||
+              this.tjwImport ||
+              this.tjwVue
+            ) {
+              output.push(' && npm install --save-dev');
+            }
+            if (this.tjwJs) {
+              output.push('eslint-config-tjw-base');
+            }
+            if (this.tjwImport) {
+              output.push('eslint-config-tjw-import');
+            }
+            if (this.tjwVue) {
+              output.push('eslint-config-tjw-vue');
+            }
+            if (this.tjwJest || this.tjwVitest) {
+              output.push('eslint-config-tjw-jest');
+            }
+            if (this.tjwJsdoc) {
+              output.push('eslint-config-tjw-jsdoc');
+            }
+            return output.join(' ');
+          },
+          eslintConfig: function () {
+            const lines = [];
+            if (this.importAlias) {
+              lines.push('import path from \'node:path\';');
+              lines.push('');
+            }
+            if (this.js) {
+              lines.push('import pluginJs from \'@eslint/js\';');
+            }
+            if (this.tjwJs) {
+              lines.push('import tjwBase from \'eslint-config-tjw-base\';');
+            }
+            if (this.tjwImport) {
+              lines.push('import tjwImport from \'eslint-config-tjw-import\';');
+            }
+            if (this.tjwJest || this.tjwVitest) {
+              lines.push('import tjwJest from \'eslint-config-tjw-jest\';');
+            }
+            if (this.tjwJsdoc) {
+              lines.push('import tjwJsdoc from \'eslint-config-tjw-jsdoc\';');
+            }
+            if (this.tjwVue) {
+              lines.push('import tjwVue from \'eslint-config-tjw-vue\';');
+            }
+            if (this.Import) {
+              lines.push('import pluginImport from \'eslint-plugin-import\';');
+            }
+            if (this.vue2 || this.vue3) {
+              lines.push('import pluginVue from \'eslint-plugin-vue\';');
+            }
+            if (this.vueA11y) {
+              lines.push('import pluginVueA11y from \'eslint-plugin-vuejs-accessibility\';');
+            }
+            lines.push('');
+            if (this.importAlias) {
+              lines.push('');
+              lines.push('const __dirname = import.meta.dirname;');
+            }
+            if (this.vue2) {
+              lines.push('const vue2Recommended = pluginVue.configs[\'flat/vue2-recommended\'];');
+            }
+            if (this.vue3) {
+              lines.push('const vue3Recommended = pluginVue.configs[\'flat/recommended\'];');
+            }
+            if (this.vue3) {
+              lines.push('const vueA11yRecommended = pluginVueA11y.configs[\'flat/recommended\'];');
+            }
+            lines.push('');
+            lines.push('export default [');
+            if (this.js) {
+              lines.push('  pluginJs.configs.recommended,');
+            }
+            if (this.Import) {
+              lines.push('  pluginImport.flatConfigs.recommended,');
+            }
+            if (this.vue2) {
+              lines.push('  ...vue2Recommended,');
+            }
+            if (this.vue3) {
+              lines.push('  ...vue3Recommended,');
+            }
+            if (this.vueA11y) {
+              lines.push('  ...vueA11yRecommended,');
+            }
+            if (this.tjwJs) {
+              lines.push('  tjwBase.configs.recommended,');
+            }
+            if (this.tjwImport) {
+              lines.push('  tjwImport,');
+            }
+            if (this.tjwJsdoc) {
+              lines.push('  ...tjwJsdoc,');
+            }
+            if (this.tjwJest || this.tjwVitest) {
+              lines.push('  tjwJest.configs.recommended,');
+            }
+            if (this.tjwVue) {
+              lines.push('  tjwVue,');
+            }
+            lines.push('  {');
+            lines.push('    // project specific rules/settings');
+            if (this.tjwVitest) {
+              lines.push('    languageOptions: {');
+              lines.push('      globals: {');
+              lines.push('        vi: true');
+              lines.push('      }');
+              lines.push('    },');
+              lines.push('    rules: {');
+              lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
+              lines.push('      \'jest/no-deprecated-functions\': \'off\'');
+              if (this.importAlias) {
+                lines.push('    },');
+              } else {
+                lines.push('    }');
+              }
+            }
+            if (this.importAlias) {
+              lines.push('    settings: {');
+              lines.push('      \'import/resolver\': {');
+              lines.push('        vite: {');
+              lines.push('          viteConfig: {');
+              lines.push('            resolve: {');
+              lines.push('              alias: {');
+              lines.push('                \'@\': path.resolve(__dirname, \'src\'),');
+              lines.push('                \'@@\': path.resolve(__dirname, \'tests\'),');
+              lines.push('                \'@@@\': path.resolve(__dirname, \'docs\')');
+              lines.push('              }');
+              lines.push('            }');
+              lines.push('          }');
+              lines.push('        }');
+              lines.push('      }');
+              lines.push('    }');
+            }
+            lines.push('  }');
+            lines.push('];');
+            const output = lines.join('\n').trim().replaceAll('\n\n\n', '\n\n');
+            const markup = hljs.highlight(output, { language: 'js' });
+            return markup.value;
+          }
+        }
+      }).mount('#app');
+    </script>
+  </body>
+</html>
