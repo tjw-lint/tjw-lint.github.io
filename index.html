@@ -186,7 +186,7 @@
             // 'checked=[js,tjwJs]' => ['js', 'tjwJs']
             const checked = queries
               .replace('checked=[', '')
-              .replacE(']', '')
+              .replace(']', '')
               .split(',');
             for (const box in checked) {
               this[box] = true;
