@@ -28,12 +28,13 @@
         margin-left: 10px;
       }
       .alert {
-        background: #161F27;
+        background: #443D6C;
         border-width: 0px 0px 0px 5px;
+        border-style: solid;
         border-color: #FFBE85;
         margin: 20px 0px;
-        padding: 25px;
-        font-size: 150%;
+        padding: 1px 25px 12px;
+        font-size: 120%;
       }
     </style>
   </head>
@@ -93,14 +94,16 @@
           <check-box v-model="tjwVitest">TJW Vitest</check-box>
         </span>
       </div>
+
       <div v-if="tjwImport" class="alert">
+        <h3>IMPORTANT:</h3>
         <p>
-          <strong>IMPORTANT:</strong>
           You will also need to create an empty <code>.eslintrc.cjs</code> file next to your <code>package.json</code>,
           due to a <a href="https://github.com/import-js/eslint-plugin-import/issues/3079">known bug</a> with the import
           linting plugin.
         </p>
       </div>
+
       <h2>Run</h2>
       <code v-text="npmInstall"></code>
       <h2>Put this in your <code>eslint.config.js</code>:</h2>
