@@ -7,9 +7,19 @@
     <link rel="stylesheet" href="/vendors/water.min.css">
     <link rel="stylesheet" href="/vendors/monokai.min.css">
     <style>
+      body {
+        font-size: 120%;
+      }
+      li {
+        line-height: 1.5;
+      }
       .controls > span {
         display: inline-block;
         margin-right: 30px;
+        border: 1px solid #34465B;
+        border-radius: 7px;
+        margin-bottom: 10px;
+        padding: 0px 7px 3px 3px;
       }
       .controls label:not(:first-of-type) {
         margin-left: 10px;
@@ -44,7 +54,7 @@
           </ul>
         </li>
         <li>
-          Check the boxes below for what Linting rules/plugins you want:
+          Check the boxes below for what linting rules/plugins you want:
         </li>
       </ol>
 
@@ -76,6 +86,7 @@
       <code v-text="npmInstall"></code>
       <h2>Put this in your <code>eslint.config.js</code>:</h2>
       <pre><code v-html="eslintConfig"></code></pre>
+      <h2>Run <code>npm run lint</code></h2>
     </div>
 
     <script>
