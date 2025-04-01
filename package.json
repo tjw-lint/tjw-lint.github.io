@@ -1,0 +1,26 @@
+{
+  "name": "tjw-lint.github.io",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "ESLint setup website",
+  "main": "index.js",
+  "scripts": {
+    "start": "vite"
+  },
+  "devDependencies": {
+    "vite": "^6.2.4"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/tjw-lint/tjw-lint.github.io.git"
+  },
+  "keywords": [
+    "linting"
+  ],
+  "author": "The Jared Wilcurt",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/tjw-lint/tjw-lint.github.io/issues"
+  },
+  "homepage": "https://tjw-lint.github.io"
+}

@@ -3,6 +3,7 @@
   <head>
     <title>ESLint setup</title>
     <script src="/vendors/vue.min.js"></script>
+    <!-- <script src="/vendors/vue.js"></script> -->
     <script src="/vendors/highlight.min.js"></script>
     <link rel="stylesheet" href="/vendors/water.min.css">
     <link rel="stylesheet" href="/vendors/monokai.min.css">
@@ -16,6 +17,9 @@
       }
       input[type="checkbox"]:active {
         transform: translateY(0px);
+      }
+      [v-cloak] {
+        display: none;
       }
       .controls > span {
         display: inline-block;
@@ -40,7 +44,7 @@
     </style>
   </head>
   <body>
-    <div id="app">
+    <div id="app" v-cloak>
       <h1>ESLint config automator</h1>
       <p>ESLint 9+ rules for ESM projects.</p>
 
@@ -134,21 +138,8 @@
     </div>
 
     <script>
+      let checkboxes = [];
 
-      const checkboxes = [
-        'Import',
-        'importAlias',
-        'js',
-        'tjwImport',
-        'tjwJs',
-        'tjwJest',
-        'tjwVitest',
-        'tjwJsdoc',
-        'tjwVue',
-        'vueA11y',
-        'vue2',
-        'vue3'
-      ];
       const app = Vue.createApp({
         components: {
           CheckBox: {
@@ -165,16 +156,28 @@
           }
         },
         data: function () {
-          const data = {};
-          for (box in checkboxes) {
-            data[box] = false;
-          }
+          const data = {
+            Import: false,
+            importAlias: false,
+            js: false,
+            tjwImport: false,
+            tjwJs: false,
+            tjwJest: false,
+            tjwVitest: false,
+            tjwJsdoc: false,
+            tjwVue: false,
+            vueA11y: false,
+            vue2: false,
+            vue3: false
+          };
+          checkboxes = Object.keys(data);
           return data;
         },
         methods: {
           parseUrlQueryParams: function () {
             // '?checked=[js,tjwJs]&x=y'
             const rawQueries = window.location.search;
+
             // ['checked=[js,tjwJs]', 'x=y'] => 'checked=[js,tjwJs]'
             const queries = rawQueries
               .replace('?', '')
@@ -183,17 +186,19 @@
                 return query.startsWith('checked=');
               })
               .join('');
+
             // 'checked=[js,tjwJs]' => ['js', 'tjwJs']
             const checked = queries
               .replace('checked=[', '')
               .replace(']', '')
               .split(',');
-            for (const box in checked) {
+
+            for (const box of checked) {
               this[box] = true;
             }
           },
-          setUrlQueryParams: function () {
-            window.history.replaceState(null, '', this.queryParams);
+          setUrlQueryParams: function (queryParams) {
+            window.history.replaceState(null, '', queryParams);
           }
         },
         computed: {
@@ -388,7 +393,7 @@
         },
         watch: {
           queryParams: function () {
-            this.setUrlQueryParams();
+            this.setUrlQueryParams(this.queryParams);
           }
         },
         created: function () {
