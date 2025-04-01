@@ -2,15 +2,47 @@
 <html lang="en">
   <head>
     <title>ESLint setup</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <script src="/vendors/vue.min.js"></script>
     <!-- <script src="/vendors/vue.js"></script> -->
     <script src="/vendors/highlight.min.js"></script>
     <link rel="stylesheet" href="/vendors/water.min.css">
     <link rel="stylesheet" href="/vendors/monokai.min.css">
     <style>
+      @import url('https://fonts.googleapis.com/css2?family=Alice&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&display=swap');
+      @import url('https://fonts.googleapis.com/css2?family=Alata&display=swap');
       body {
-        font-size: 120%;
         margin-bottom: 150px;
+        font-family: 'Quicksand', 'Century Gothic', sans-serif;
+        font-optical-sizing: auto;
+        font-size: 120%;
+        font-style: normal;
+        font-weight: 500;
+      }
+      h1, h2 {
+        font-family: 'Alice', Georgia, serif;
+        font-weight: 400;
+        font-style: normal;
+      }
+      h1 {
+        font-size: 70px;
+      }
+      h3 {
+        font-family: 'Alata', sans-serif;
+        font-style: normal;
+        font-weight: 400;
+        letter-spacing: 2.5px;
+        line-height: 1.3;
+        text-shadow: 1px 0px 0px #0000007A, -1px 0px 0px #0000007A;
+      }
+      code,
+      pre {
+        font-family: 'DM Mono', 'Share Tech Mono', monospace;
+        font-weight: 400;
+        font-style: normal;
+        font-size: 88%;
       }
       li {
         line-height: 1.5;
@@ -32,6 +64,16 @@
       .controls label:not(:first-of-type) {
         margin-left: 10px;
       }
+      .controls > ul > li,
+      .controls ul label {
+        font-weight: bold;
+      }
+      .controls ul label:after {
+        content: ' - ';
+      }
+      .controls > ul > li > ul > li {
+        font-weight: normal;
+      }
       .alert {
         background: #443D6C;
         border-width: 0px 0px 0px 5px;
@@ -39,13 +81,16 @@
         border-color: #FFBE85;
         margin: 20px 0px;
         padding: 1px 25px 12px;
+        font-family: 'Alata', sans-serif;
         font-size: 120%;
+        line-height: 1.6;
+        box-shadow: 0px 0px 6px #0005, 6px 6px 6px #0005;
       }
     </style>
   </head>
   <body>
     <div id="app" v-cloak>
-      <h1>ESLint config automator</h1>
+      <h1>ESLint Config Automator</h1>
       <p>ESLint 9+ rules for ESM projects.</p>
 
       <h2>Prequisites</h2>
@@ -72,9 +117,15 @@
         </li>
       </ol>
 
-      <h2>6. Check the boxes below for what linting rules/plugins you want:</h2>
+      <h2>
+        6. Check the boxes below for what linting rules/plugins you want:
+        <span style="float: right; padding-top: 10px; font-size: 50%">
+          <check-box v-model="showInfo">Show details</check-box>
+        </span>
+      </h2>
 
-      <div class="controls">
+
+      <div v-if="!showInfo" class="controls">
         <span>
           <check-box v-model="js">JS</check-box>
           <check-box v-model="tjwJs">TJW JS</check-box>
@@ -99,8 +150,86 @@
         </span>
       </div>
 
+      <div v-else class="controls">
+        <ul>
+          <li>
+            JavaScript
+            <ul>
+              <li>
+                <check-box v-model="js">JS</check-box>
+                Official ESLint recommended settings that handle error prevention, but nothing style related
+              </li>
+              <li>
+                <check-box v-model="tjwJs">TJW JS</check-box>
+                The Jared Wilcurt's Premium JavaScript settings, with stylistic enforcements, for classy, sophisticated developers.
+              </li>
+            </ul>
+          </li>
+          <li>
+            ESM Imports
+            <ul>
+              <li>
+                  <check-box v-model="Import">Imports Plugin</check-box>
+                  This plug-in adds many features for detecting issues around ESM imports and exports, including if a variable being exported is imported in other files.
+              </li>
+              <li>
+                  <check-box v-model="tjwImport">TJW Import</check-box>
+                  The Jared Wilcurt's settings for the custom rules supplied by the Imports plugin.
+              </li>
+              <li>
+                  <check-box v-model="importAlias">Import Alias</check-box>
+                  Allows defining your own custom file import path aliases so the Imports plugin can resolve them during linting.
+              </li>
+            </ul>
+          </li>
+          <li>
+            Vue.js Linting
+            <ul>
+              <li>
+                <check-box v-model="vue2">Vue 2</check-box>
+                The official Vue.js 2.x ESLint plugin with custom rules for Vue.
+              </li>
+              <li>
+                <check-box v-model="vue3">Vue 3</check-box>
+                The official Vue.js 3.x ESLint plugin with custom rules for Vue.
+              </li>
+              <li>
+                <check-box v-model="tjwVue">TJW Vue</check-box>
+                The Jared Wilcurt's more strict and refined recommended settings for the Vue plugin's rules.
+              </li>
+              <li>
+                <check-box v-model="vueA11y">Vue A11Y</check-box>
+                A plugin for checking Accessibility issues in Vue components.
+              </li>
+            </ul>
+          </li>
+          <li>
+            JSDocs
+            <ul>
+              <li>
+                <check-box v-model="tjwJsdoc">TJW JSDoc</check-box>
+                The Jared Wilcurt's <a href="https://github.com/tjw-lint/eslint-config-tjw-jsdoc?tab=readme-ov-file#what-does-it-look-like">highly customized and pristine settings</a> for JSDoc comment blocks to improve readability and enforce accurate function/argument documentation and type declarations. A <em>perfect</em> replacement for <a href="https://dev.to/thejaredwilcurt/ts-is-bad-at-hover-text-3n0j" title="TS is bad at hover text (DEV.to)">TypeScript</a>.
+              </li>
+            </ul>
+          </li>
+          <li>
+            Unit Testing
+            <ul>
+              <li>
+                <check-box v-model="tjwJest">TJW Jest</check-box>
+                This plugin extends the recommended Jest Lint settings. It adds 5 new custom linting rules exclusive to the library for an improved testing experience.
+              </li>
+              <li>
+                <check-box v-model="tjwVitest">TJW Vitest</check-box>
+                This is the same as TJW Jest, we just make a few tweaks to be compatible with Vitest.
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+
       <div v-if="tjwImport" class="alert">
-        <h3>IMPORTANT:</h3>
+        <h3>Important:</h3>
         <p>
           You will also need to create an empty <code>.eslintrc.cjs</code> file next to your <code>package.json</code>,
           due to a <a href="https://github.com/import-js/eslint-plugin-import/issues/3079">known bug</a> with the import
@@ -109,7 +238,7 @@
       </div>
 
       <h2>7. Run this:</h2>
-      <code v-text="npmInstall"></code>
+      <pre style="white-space:pre-wrap"><code v-html="npmInstall"></code></pre>
       <h2>8. Put this in your <code>eslint.config.js</code>:</h2>
       <pre><code v-html="eslintConfig"></code></pre>
       <h2>9. Run <code>npm run lint</code></h2>
@@ -156,6 +285,7 @@
         },
         data: function () {
           const data = {
+            showInfo: false,
             Import: false,
             importAlias: false,
             js: false,
@@ -251,7 +381,7 @@
               this.tjwImport ||
               this.tjwVue
             ) {
-              output.push(' && npm install --save-dev');
+              output.push('&& npm install --save-dev');
             }
             if (this.tjwJs) {
               output.push('eslint-config-tjw-base');
@@ -268,7 +398,19 @@
             if (this.tjwJsdoc) {
               output.push('eslint-config-tjw-jsdoc');
             }
-            return output.join(' ');
+            const markup = output
+              .join(' ')
+              // .replaceAll('/', '<span class="hljs-tag">/</span>')
+              .replaceAll(' @', '__TEMP__')
+              .replaceAll('@', '<span class="hljs-number">@</span>')
+              .replaceAll('__TEMP__', ' @')
+              .replaceAll('@stylistic/', '<span class="hljs-link">@stylistic/</span>')
+              .replaceAll('@eslint/', '<span class="hljs-link">@eslint/</span>')
+              .replaceAll('npm ', '<span class="hljs-literal">npm</span> ')
+              .replaceAll(' install ', ' <span class="hljs-attribute">install</span> ')
+              .replaceAll(' --save-dev ', ' <span class="hljs-attribute">--save-dev</span> ')
+              .replaceAll(' && ', ' <span class="hljs-title">&&</span> ');
+            return '<span class="hljs-string">' + markup + '</span>';
           },
           eslintConfig: function () {
             const lines = [];
