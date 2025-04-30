@@ -439,6 +439,9 @@
             if (this.Import) {
               lines.push('import pluginImport from \'eslint-plugin-import\';');
             }
+            if (this.tjwJest || this.tjwVitest) {
+              lines.push('import pluginJest from \'eslint-plugin-jest\';');
+            }
             if (this.vue2 || this.vue3) {
               lines.push('import pluginVue from \'eslint-plugin-vue\';');
             }
@@ -466,6 +469,9 @@
             }
             if (this.Import) {
               lines.push('  pluginImport.flatConfigs.recommended,');
+            }
+            if (this.tjwJest || this.tjwVitest) {
+              lines.push('  pluginJest.configs[\'flat/recommended\'],');
             }
             if (this.vue2) {
               lines.push('  ...vue2Recommended,');
