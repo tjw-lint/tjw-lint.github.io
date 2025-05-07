@@ -499,7 +499,25 @@
             }
             lines.push('  {');
             lines.push('    // project specific rules/settings');
-            if (this.tjwVitest) {
+            if (this.vueA11y && !this.tjwVitest) {
+              lines.push('    rules: {');
+              lines.push('      \'vuejs-accessibility/label-has-for\': [');
+              lines.push('        \'error\',');
+              lines.push('        {');
+              lines.push('          components: [\'Label\'],');
+              lines.push('          required: {');
+              lines.push('            some: [\'nesting\', \'id\']');
+              lines.push('          },');
+              lines.push('          allowChildren: false');
+              lines.push('        }');
+              lines.push('      ]');
+              if (this.importAlias) {
+                lines.push('    },');
+              } else {
+                lines.push('    }');
+              }
+            }
+            if (this.tjwVitest && !this.vueA11y) {
               lines.push('    languageOptions: {');
               lines.push('      globals: {');
               lines.push('        vi: true');
@@ -514,6 +532,33 @@
                 lines.push('    }');
               }
             }
+
+            if (this.tjwVitest && this.vueA11y) {
+              lines.push('    languageOptions: {');
+              lines.push('      globals: {');
+              lines.push('        vi: true');
+              lines.push('      }');
+              lines.push('    },');
+              lines.push('    rules: {');
+              lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
+              lines.push('      \'jest/no-deprecated-functions\': \'off\',');
+              lines.push('      \'vuejs-accessibility/label-has-for\': [');
+              lines.push('        \'error\',');
+              lines.push('        {');
+              lines.push('          components: [\'Label\'],');
+              lines.push('          required: {');
+              lines.push('            some: [\'nesting\', \'id\']');
+              lines.push('          },');
+              lines.push('          allowChildren: false');
+              lines.push('        }');
+              lines.push('      ]');
+              if (this.importAlias) {
+                lines.push('    },');
+              } else {
+                lines.push('    }');
+              }
+            }
+
             if (this.importAlias) {
               lines.push('    settings: {');
               lines.push('      \'import/resolver\': {');
