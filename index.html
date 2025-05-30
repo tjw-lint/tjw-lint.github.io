@@ -499,53 +499,31 @@
               lines.push('  tjwVue,');
             }
             lines.push('  {');
-            lines.push('    // project specific rules/settings');
-            if (this.vueA11y && !this.tjwVitest) {
-              lines.push('    rules: {');
-              lines.push('      \'vuejs-accessibility/label-has-for\': [');
-              lines.push('        \'error\',');
-              lines.push('        {');
-              lines.push('          components: [\'Label\'],');
-              lines.push('          required: {');
-              lines.push('            some: [\'nesting\', \'id\']');
-              lines.push('          },');
-              lines.push('          allowChildren: false');
-              lines.push('        }');
-              lines.push('      ]');
-              if (this.importAlias) {
-                lines.push('    },');
-              } else {
-                lines.push('    }');
-              }
-            }
             lines.push('    languageOptions: {');
-            lines.push('      ecmaVersion: ' + CURRENT_YEAR + ',');
-            lines.push('      globals: {');
             if (this.tjwVitest) {
+              lines.push('      ecmaVersion: ' + CURRENT_YEAR + ',');
+              lines.push('      globals: {');
               lines.push('        vi: true');
+              lines.push('      }');
+            } else {
+              lines.push('      ecmaVersion: ' + CURRENT_YEAR);
             }
-            lines.push('      }');
-            if (this.tjwVitest || this.importAlias) {
+            if (this.vueA11y || this.tjwVitest || this.importAlias) {
               lines.push('    },');
             } else {
               lines.push('    }');
             }
-
-            if (this.tjwVitest && !this.vueA11y) {
-              lines.push('    rules: {');
+            lines.push('    // project specific rules/settings');
+            lines.push('    rules: {');
+            if (this.tjwVitest) {
               lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
-              lines.push('      \'jest/no-deprecated-functions\': \'off\'');
-              if (this.importAlias) {
-                lines.push('    },');
+              if (!this.vueA11y) {
+                lines.push('      \'jest/no-deprecated-functions\': \'off\'');
               } else {
-                lines.push('    }');
+                lines.push('      \'jest/no-deprecated-functions\': \'off\',');
               }
             }
-
-            if (this.tjwVitest && this.vueA11y) {
-              lines.push('    rules: {');
-              lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
-              lines.push('      \'jest/no-deprecated-functions\': \'off\',');
+            if (this.vueA11y) {
               lines.push('      \'vuejs-accessibility/label-has-for\': [');
               lines.push('        \'error\',');
               lines.push('        {');
@@ -556,13 +534,13 @@
               lines.push('          allowChildren: false');
               lines.push('        }');
               lines.push('      ]');
-              if (this.importAlias) {
-                lines.push('    },');
-              } else {
-                lines.push('    }');
-              }
             }
-
+            // Close rules: {},
+            if (this.importAlias) {
+              lines.push('    },');
+            } else {
+              lines.push('    }');
+            }
             if (this.importAlias) {
               lines.push('    settings: {');
               lines.push('      \'import/resolver\': {');
