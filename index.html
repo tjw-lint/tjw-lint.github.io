@@ -267,6 +267,7 @@
 
     <script>
       let checkboxes = [];
+      const CURRENT_YEAR = (new Date()).getFullYear();
 
       const app = Vue.createApp({
         components: {
@@ -517,12 +518,20 @@
                 lines.push('    }');
               }
             }
-            if (this.tjwVitest && !this.vueA11y) {
-              lines.push('    languageOptions: {');
-              lines.push('      globals: {');
+            lines.push('    languageOptions: {');
+            lines.push('      ecmaVersion: ' + CURRENT_YEAR + ',');
+            lines.push('      globals: {');
+            if (this.tjwVitest) {
               lines.push('        vi: true');
-              lines.push('      }');
+            }
+            lines.push('      }');
+            if (this.tjwVitest || this.importAlias) {
               lines.push('    },');
+            } else {
+              lines.push('    }');
+            }
+
+            if (this.tjwVitest && !this.vueA11y) {
               lines.push('    rules: {');
               lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
               lines.push('      \'jest/no-deprecated-functions\': \'off\'');
@@ -534,11 +543,6 @@
             }
 
             if (this.tjwVitest && this.vueA11y) {
-              lines.push('    languageOptions: {');
-              lines.push('      globals: {');
-              lines.push('        vi: true');
-              lines.push('      }');
-              lines.push('    },');
               lines.push('    rules: {');
               lines.push('      // If this is not turned off, linting throws because it can\'t find \'jest\' install');
               lines.push('      \'jest/no-deprecated-functions\': \'off\',');
