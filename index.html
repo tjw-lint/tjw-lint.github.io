@@ -508,11 +508,7 @@
             } else {
               lines.push('      ecmaVersion: ' + CURRENT_YEAR);
             }
-            if (this.vueA11y || this.tjwVitest || this.importAlias) {
-              lines.push('    },');
-            } else {
-              lines.push('    }');
-            }
+            lines.push('    },');
             lines.push('    // project specific rules/settings');
             lines.push('    rules: {');
             if (this.tjwVitest) {
