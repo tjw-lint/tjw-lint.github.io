@@ -8,7 +8,7 @@
     "start": "vite"
   },
   "devDependencies": {
-    "vite": "^6.3.5"
+    "vite": "^7.3.2"
   },
   "repository": {
     "type": "git",
@@ -23,8 +23,14 @@
     "url": "https://github.com/tjw-lint/tjw-lint.github.io/issues"
   },
   "homepage": "https://tjw-lint.github.io",
-  "volta": {
-    "node": "24.1.0",
-    "npm": "11.4.1"
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.14.1"
+    },
+    "packageManager": {
+      "name": "npm",
+      "version": "11.12.1"
+    }
   }
 }
