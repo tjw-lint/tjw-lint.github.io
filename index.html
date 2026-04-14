@@ -91,7 +91,7 @@
   <body>
     <div id="app" v-cloak>
       <h1>ESLint Config Automator</h1>
-      <p>ESLint 9+ rules for ESM projects.</p>
+      <p>ESLint 10+ rules for ESM projects.</p>
 
       <h2>Prequisites</h2>
       <ol>
@@ -228,15 +228,6 @@
         </ul>
       </div>
 
-      <div v-if="tjwImport" class="alert">
-        <h3>Important:</h3>
-        <p>
-          You will also need to create an empty <code>.eslintrc.cjs</code> file next to your <code>package.json</code>,
-          due to a <a href="https://github.com/import-js/eslint-plugin-import/issues/3079">known bug</a> with the import
-          linting plugin.
-        </p>
-      </div>
-
       <h2>7. Run this:</h2>
       <pre style="white-space:pre-wrap"><code v-html="npmInstall"></code></pre>
       <h2>8. Put this in your <code>eslint.config.js</code>:</h2>
@@ -251,14 +242,14 @@
         <li><a href="https://eslint.org">ESLint</a></li>
         <li v-if="tjwJs"><a href="https://eslint.style">ESLint Stylistic</a></li>
         <li v-if="tjwJs"><a href="https://github.com/sindresorhus/globals/blob/main/globals.json">Globals</li>
-        <li v-if="Import"><a href="https://github.com/import-js/eslint-plugin-import">ESLint Plugin Import</li>
+        <li v-if="Import"><a href="https://github.com/un-ts/eslint-plugin-import-x">ESLint Plugin Import</li>
         <li v-if="tjwJest || tjwVitest"><a href="https://github.com/jest-community/eslint-plugin-jest">ESLint Plugin Jest</a></li>
         <li v-if="tjwJsdoc"><a href="https://github.com/gajus/eslint-plugin-jsdoc">ESLint Plugin JSDoc</a>
         <li v-if="vue2 || vue3"><a href="https://eslint.vuejs.org">ESLint Plugin Vue</a>
         <li v-if="vueA11y"><a href="https://vue-a11y.github.io/eslint-plugin-vuejs-accessibility">ESLint Plugin Vue Accessibility</a></li>
         <li v-if="importAlias"><a href="https://github.com/pzmosquito/eslint-import-resolver-vite">ESLint Vite Import Resolver</a></li>
         <li v-if="tjwJs"><a href="https://github.com/tjw-lint/eslint-config-tjw-base">TJW Base (JS)</a></li>
-        <li v-if="tjwImport"><a href="https://github.com/tjw-lint/eslint-config-tjw-import">TJW Import</a></li>
+        <li v-if="tjwImport"><a href="https://github.com/tjw-lint/eslint-config-tjw-import-x">TJW Import</a></li>
         <li v-if="tjwJest"><a href="https://github.com/tjw-lint/eslint-config-tjw-jest">TJW Jest</a></li>
         <li v-if="tjwJsdoc"><a href="https://github.com/tjw-lint/eslint-config-tjw-jsdoc">TJW JSDoc</a></li>
         <li v-if="tjwVue"><a href="https://github.com/tjw-lint/eslint-config-tjw-vue">TJW Vue</a></li>
@@ -344,7 +335,7 @@
           },
           npmInstall: function () {
             let output = [];
-            output.push('npm install --save-dev eslint@9');
+            output.push('npm install --save-dev eslint@10');
             if (this.js) {
               output.push('@eslint/js');
             }
@@ -360,7 +351,7 @@
               this.tjwImport ||
               this.importAlias
             ) {
-              output.push('eslint-plugin-import');
+              output.push('eslint-plugin-import-x');
             }
             if (this.importAlias) {
               output.push('eslint-import-resolver-vite');
@@ -388,7 +379,7 @@
               output.push('eslint-config-tjw-base');
             }
             if (this.tjwImport) {
-              output.push('eslint-config-tjw-import');
+              output.push('eslint-config-tjw-import-x');
             }
             if (this.tjwVue) {
               output.push('eslint-config-tjw-vue');
@@ -426,7 +417,7 @@
               lines.push('import tjwBase from \'eslint-config-tjw-base\';');
             }
             if (this.tjwImport) {
-              lines.push('import tjwImport from \'eslint-config-tjw-import\';');
+              lines.push('import tjwImport from \'eslint-config-tjw-import-x\';');
             }
             if (this.tjwJest || this.tjwVitest) {
               lines.push('import tjwJest from \'eslint-config-tjw-jest\';');
@@ -438,7 +429,7 @@
               lines.push('import tjwVue from \'eslint-config-tjw-vue\';');
             }
             if (this.Import) {
-              lines.push('import pluginImport from \'eslint-plugin-import\';');
+              lines.push('import pluginImport from \'eslint-plugin-import-x\';');
             }
             if (this.tjwJest || this.tjwVitest) {
               lines.push('import pluginJest from \'eslint-plugin-jest\';');
@@ -539,7 +530,7 @@
             }
             if (this.importAlias) {
               lines.push('    settings: {');
-              lines.push('      \'import/resolver\': {');
+              lines.push('      \'import-x/resolver\': {');
               lines.push('        vite: {');
               lines.push('          viteConfig: {');
               lines.push('            resolve: {');
